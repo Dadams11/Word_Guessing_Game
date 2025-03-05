@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Guessing Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        #word-display {
+            font-size: 24px;
+            margin: 20px;
+        }
+        #message {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Word Guessing Game</h1>
+    <button id="start-button">Start Game</button>
+    <p id="timer">Time Left: 60s</p>
+    <p id="word-display">_ _ _ _ _</p>
+    <p id="message"></p>
+    <p id="wins">Wins: 0</p>
+    <p id="losses">Losses: 0</p>
+    
+    <script src="script.js"></script>
+</body>
+</html>

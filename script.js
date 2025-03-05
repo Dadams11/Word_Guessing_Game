@@ -1,10 +1,10 @@
-// Word Guessing Game
-
 document.addEventListener("DOMContentLoaded", function () {
     const words = ["apple", "banana", "cherry", "grape", "orange"];
     let chosenWord = "";
     let displayWord = [];
     let guessedLetters = new Set();
+    let incorrectGuesses = 0;
+    let maxAttempts = 4;
     let timer;
     let timeLeft = 60;
     let wins = localStorage.getItem("wins") ? parseInt(localStorage.getItem("wins")) : 0;
@@ -21,11 +21,18 @@ document.addEventListener("DOMContentLoaded", function () {
         chosenWord = words[Math.floor(Math.random() * words.length)];
         displayWord = Array(chosenWord.length).fill("_");
         guessedLetters.clear();
+        incorrectGuesses = 0;
         timeLeft = 60;
+        giveHint();
         updateDisplay();
         messageDisplay.textContent = "";
         clearInterval(timer);
         timer = setInterval(updateTimer, 1000);
+    }
+    
+    function giveHint() {
+        let hintIndex = Math.floor(Math.random() * chosenWord.length);
+        displayWord[hintIndex] = chosenWord[hintIndex];
     }
     
     function updateDisplay() {
@@ -39,12 +46,22 @@ document.addEventListener("DOMContentLoaded", function () {
             timeLeft--;
             timerDisplay.textContent = `Time Left: ${timeLeft}s`;
         } else {
-            clearInterval(timer);
+            endGame(false);
+        }
+    }
+    
+    function endGame(win) {
+        clearInterval(timer);
+        if (win) {
+            wins++;
+            localStorage.setItem("wins", wins);
+            messageDisplay.textContent = "You won!";
+        } else {
             losses++;
             localStorage.setItem("losses", losses);
-            messageDisplay.textContent = "You lost!";
-            updateDisplay();
+            messageDisplay.textContent = `You lost! The word was: ${chosenWord}`;
         }
+        updateDisplay();
     }
     
     document.addEventListener("keydown", function (event) {
@@ -58,10 +75,12 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
                 }
                 if (!displayWord.includes("_")) {
-                    clearInterval(timer);
-                    wins++;
-                    localStorage.setItem("wins", wins);
-                    messageDisplay.textContent = "You won!";
+                    endGame(true);
+                }
+            } else {
+                incorrectGuesses++;
+                if (incorrectGuesses >= maxAttempts) {
+                    endGame(false);
                 }
             }
             updateDisplay();
